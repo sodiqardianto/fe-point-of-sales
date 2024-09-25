@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { NavbarMenu } from "@/components/NavbarMenu";
+import { MaterialTailwindControllerProvider } from "@/context";
+import { ThemeProvider } from "../app/MTailwind";
+import Configurator from "@/components/Configurator";
+import Footer from "@/components/Footer";
+import { Sidenav } from "@/components/Sidenav";
+import ButtonConfigurator from "@/components/ButtonConfigurator";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,9 +33,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        {children}
+        <ThemeProvider>
+          <MaterialTailwindControllerProvider>
+            <div className="min-h-screen bg-blue-gray-50/50">
+              <Sidenav />
+              <div className="p-4 xl:ml-80">
+                <NavbarMenu />
+                {children}
+                <Configurator />
+                <ButtonConfigurator />
+                <div className="text-blue-gray-600 relative">
+                  <Footer />
+                </div>
+              </div>
+            </div>
+          </MaterialTailwindControllerProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
