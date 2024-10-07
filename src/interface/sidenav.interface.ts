@@ -1,3 +1,7 @@
+export interface SidenavProps {
+  routes: RouteInterface[];
+}
+
 export interface RouteInterface {
     uniq_id: string;
     name: string;

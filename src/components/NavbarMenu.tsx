@@ -20,16 +20,20 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
+import { AvatarWithUserDropdown } from "./AvatarWithUserDropdown";
 import {
-  useMaterialTailwindController,
   setOpenConfigurator,
   setOpenSidenav,
-} from "@/context";
-import { AvatarWithUserDropdown } from "./AvatarWithUserDropdown";
+} from "@/store/slices/configuratorSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export function NavbarMenu() {
-  const [controller, dispatch] = useMaterialTailwindController();
-  const { fixedNavbar, openSidenav } = controller;
+  const dispatch = useDispatch();
+  const { fixedNavbar, openSidenav } = useSelector(
+    (state: RootState) => state.openConfigurator
+  );
+
   const pathname = usePathname();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
 
@@ -80,7 +84,7 @@ export function NavbarMenu() {
             variant="text"
             color="blue-gray"
             className="grid xl:hidden"
-            onClick={() => setOpenSidenav(dispatch, !openSidenav)}
+            onClick={() => dispatch(setOpenSidenav(!openSidenav))}
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
@@ -166,7 +170,7 @@ export function NavbarMenu() {
           <IconButton
             variant="text"
             color="blue-gray"
-            onClick={() => setOpenConfigurator(dispatch, true)}
+            onClick={() => dispatch(setOpenConfigurator(true))}
           >
             <Cog6ToothIcon className="h-5 w-5 text-blue-gray-500" />
           </IconButton>

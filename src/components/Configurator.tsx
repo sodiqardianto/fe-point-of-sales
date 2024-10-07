@@ -7,18 +7,19 @@ import {
   Switch,
   Typography,
 } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import {
-  useMaterialTailwindController,
+  setFixedNavbar,
   setOpenConfigurator,
   setSidenavColor,
   setSidenavType,
-  setFixedNavbar,
-} from "@/context";
+} from "@/store/slices/configuratorSlice";
 
 export function Configurator() {
-  const [controller, dispatch] = useMaterialTailwindController();
-  const { openConfigurator, sidenavColor, sidenavType, fixedNavbar } =
-    controller;
+  const dispatch = useDispatch();
+  const { openConfigurator, fixedNavbar, sidenavType, sidenavColor } =
+    useSelector((state: RootState) => state.openConfigurator);
 
   const sidenavColors = {
     white: "from-gray-100 to-gray-100 border-gray-200",
@@ -47,7 +48,7 @@ export function Configurator() {
         <IconButton
           variant="text"
           color="blue-gray"
-          onClick={() => setOpenConfigurator(dispatch, false)}
+          onClick={() => dispatch(setOpenConfigurator(false))}
         >
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5" />
         </IconButton>
@@ -66,7 +67,7 @@ export function Configurator() {
                 } ${
                   sidenavColor === color ? "border-black" : "border-transparent"
                 }`}
-                onClick={() => setSidenavColor(dispatch, color)}
+                onClick={() => dispatch(setSidenavColor(color))}
               />
             ))}
           </div>
@@ -81,19 +82,19 @@ export function Configurator() {
           <div className="mt-3 flex items-center gap-2">
             <Button
               variant={sidenavType === "dark" ? "gradient" : "outlined"}
-              onClick={() => setSidenavType(dispatch, "dark")}
+              onClick={() => dispatch(setSidenavType("dark"))}
             >
               Dark
             </Button>
             <Button
               variant={sidenavType === "transparent" ? "gradient" : "outlined"}
-              onClick={() => setSidenavType(dispatch, "transparent")}
+              onClick={() => dispatch(setSidenavType("transparent"))}
             >
               Transparent
             </Button>
             <Button
               variant={sidenavType === "white" ? "gradient" : "outlined"}
-              onClick={() => setSidenavType(dispatch, "white")}
+              onClick={() => dispatch(setSidenavType("white"))}
             >
               White
             </Button>
@@ -108,7 +109,8 @@ export function Configurator() {
             <Switch
               id="navbar-fixed"
               checked={fixedNavbar}
-              onChange={() => setFixedNavbar(dispatch, !fixedNavbar)}
+              onChange={() => dispatch(setFixedNavbar(!fixedNavbar))}
+              crossOrigin={""}
             />
           </div>
           <hr />
@@ -132,7 +134,5 @@ export function Configurator() {
     </aside>
   );
 }
-
-Configurator.displayName = "/src/widgets/layout/configurator.jsx";
 
 export default Configurator;
