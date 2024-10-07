@@ -10,115 +10,50 @@ import {
   AccordionBody,
   IconButton,
 } from "@material-tailwind/react";
-import { HomeIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  CubeIcon,
+  HomeIcon,
+  UserIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { setOpenSidenav, useMaterialTailwindController } from "@/context";
+import { RouteInterface, Submenu } from "@/interface/sidenav.interface";
 
-interface Route {
-  id: string;
-  name: string;
-  path: string; // added path for route matching
-  title?: string | null;
-  icon: React.ReactNode;
-  submenus?: SubMenu[];
-}
-
-interface SubMenu {
-  id: string;
-  name: string;
-  path: string; // added path for submenu route matching
-  icon: React.ReactNode;
-}
-
-const icon = {
-  className: "w-5 h-5 text-inherit",
+const iconsMap: Record<string, React.ReactNode> = {
+  HomeIcon: <HomeIcon className={`w-5 h-5 text-inherit`} />,
+  UserIcon: <UserIcon className={`w-5 h-5 text-inherit`} />,
+  CubeIcon: <CubeIcon className={`w-5 h-5 text-inherit`} />,
 };
 
-const routes: Route[] = [
-  {
-    id: "1ku123",
-    name: "dashboard",
-    path: "/dashboard",
-    title: null,
-    icon: <HomeIcon {...icon} />,
-    submenus: [],
-  },
-  {
-    id: "1f23f2",
-    name: "main",
-    path: "/main",
-    title: "data main",
-    icon: <HomeIcon {...icon} />,
-    submenus: [
-      {
-        id: "11241d13",
-        name: "menu",
-        path: "/menu",
-        icon: <HomeIcon {...icon} />,
-      },
-      {
-        id: "12e128h9",
-        name: "table",
-        path: "/table",
-        icon: <HomeIcon {...icon} />,
-      },
-    ],
-  },
-  {
-    id: "2c1093j",
-    name: "customer",
-    path: "/customer",
-    title: null,
-    icon: <HomeIcon {...icon} />,
-    submenus: [],
-  },
-  {
-    id: "312ne12",
-    name: "products",
-    path: "/products",
-    title: null,
-    icon: <HomeIcon {...icon} />,
-    submenus: [
-      {
-        id: "1i2u3nd1",
-        name: "electronics",
-        path: "/electronics",
-        icon: <HomeIcon {...icon} />,
-      },
-      {
-        id: "1do2i3d",
-        name: "furniture",
-        path: "/furniture",
-        icon: <HomeIcon {...icon} />,
-      },
-    ],
-  },
-];
+interface SidenavProps {
+  routes: RouteInterface[];
+}
 
-export function Sidenav() {
+export function Sidenav({ routes }: SidenavProps) {
   const [open, setOpen] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    const routeMatch = routes.find(
+    const routeMatch = routes?.find(
       (route) =>
         route.submenus?.find((submenu) => submenu.path === pathname) ||
         route.path === pathname
     );
 
     if (routeMatch) {
-      setOpen(routeMatch.submenus?.length ? routeMatch.id : null);
+      setOpen(routeMatch.submenus?.length ? routeMatch?.uniq_id : null);
       setSelected(
         routeMatch.submenus
           ?.find((submenu) => submenu.path === pathname)
-          ?.id?.toString() || routeMatch.id
+          ?.uniq_id?.toString() || routeMatch.uniq_id
       );
     }
-  }, [pathname]);
+  }, [pathname, routes]);
 
   const handleOpen = (value: string) => {
     setOpen(open === value ? null : value);
@@ -160,38 +95,38 @@ export function Sidenav() {
         </div>
 
         <List>
-          {routes.map((menu: Route) => (
-            <React.Fragment key={menu.id}>
+          {(routes || []).map((menu: RouteInterface) => (
+            <React.Fragment key={menu.uniq_id}>
               {menu.submenus && menu.submenus.length > 0 ? (
-                <Accordion open={open === menu.id}>
+                <Accordion open={open === menu.uniq_id}>
                   <ListItem
-                    onClick={() => handleOpen(menu.id)}
-                    data-selected={open === menu.id}
-                    selected={open === menu.id}
+                    onClick={() => handleOpen(menu.uniq_id)}
+                    data-selected={open === menu.uniq_id}
+                    selected={open === menu.uniq_id}
                     className={` ${
-                      open === menu.id
+                      open === menu.uniq_id
                         ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:text-white focus:text-white"
                         : "select-none hover:bg-gray-100 focus:bg-gray-100 active:bg-red-100 hover:text-gray-900 focus:text-gray-900 active:text-gray-900"
                     }`}
                   >
-                    <ListItemPrefix>{menu.icon}</ListItemPrefix>
-                    <Typography className="mr-auto font-normal text-inherit">
+                    <ListItemPrefix>{iconsMap[menu.icon]}</ListItemPrefix>
+                    <Typography className="mr-auto font-normal text-inherit capitalize">
                       {menu.name}
                     </Typography>
                     <ChevronDownIcon
                       strokeWidth={3}
                       className={`ml-auto h-4 w-4 text-gray-500 transition-transform ${
-                        open === menu.id ? "rotate-180" : ""
+                        open === menu.uniq_id ? "rotate-180" : ""
                       }`}
                     />
                   </ListItem>
                   <AccordionBody className="p-0">
                     <List className="p-0">
-                      {menu.submenus.map((submenu: SubMenu) => (
-                        <Link href={submenu.path} key={submenu.id}>
+                      {menu.submenus.map((submenu: Submenu) => (
+                        <Link href={submenu.path} key={submenu.uniq_id}>
                           <ListItem
-                            className={`px-12 select-none hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 hover:text-gray-900 focus:text-gray-900 active:text-gray-900 ${
-                              selected === submenu.id.toString()
+                            className={`px-12 select-none hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 hover:text-gray-900 focus:text-gray-900 active:text-gray-900 capitalize ${
+                              selected === submenu?.uniq_id?.toString()
                                 ? "text-gray-900 bg-gray-300 focus:bg-gray-300"
                                 : ""
                             }`}
@@ -204,18 +139,18 @@ export function Sidenav() {
                   </AccordionBody>
                 </Accordion>
               ) : (
-                <Link href={menu.path} key={menu.id}>
+                <Link href={menu.path} key={menu.uniq_id}>
                   <ListItem
-                    selected={selected === menu.id}
-                    onClick={() => setSelectedItem(menu.id)}
+                    selected={selected === menu.uniq_id}
+                    onClick={() => setSelectedItem(menu.uniq_id)}
                     className={`${
-                      selected === menu.id
+                      selected === menu.uniq_id
                         ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:text-white focus:text-white"
                         : "select-none hover:bg-gray-200 focus:bg-gray-100 active:bg-gray-100 hover:text-gray-900 focus:text-gray-900 active:text-gray-900"
                     }`}
                   >
-                    <ListItemPrefix>{menu.icon}</ListItemPrefix>
-                    <Typography className="mr-auto font-normal text-inherit">
+                    <ListItemPrefix>{iconsMap[menu?.icon]}</ListItemPrefix>
+                    <Typography className="mr-auto font-normal text-inherit capitalize">
                       {menu.name}
                     </Typography>
                   </ListItem>

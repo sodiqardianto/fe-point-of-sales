@@ -33,8 +33,6 @@ export function NavbarMenu() {
   const pathname = usePathname();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
 
-  console.log(layout, page);
-
   return (
     <Navbar
       color={fixedNavbar ? "white" : "transparent"}
@@ -76,7 +74,7 @@ export function NavbarMenu() {
         </div>
         <div className="flex items-center">
           <div className="mr-auto md:mr-4 md:w-56">
-            <Input label="Search" />
+            <Input label="Search" crossOrigin={undefined} />
           </div>
           <IconButton
             variant="text"
