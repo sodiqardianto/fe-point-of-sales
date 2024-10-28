@@ -2,7 +2,7 @@
 import React, { createElement } from "react";
 import { Typography } from "@material-tailwind/react";
 
-import { statisticsCardsData } from "../data/statistics-cards-data";
+import { statisticsCardsData } from "../../data/statistics-cards-data";
 import StatisticsCard from "@/components/StatisticsCard";
 
 const Dashboard = () => {

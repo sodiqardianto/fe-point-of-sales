@@ -8,14 +8,8 @@ import {
   ListItemPrefix,
   Accordion,
   AccordionBody,
-  IconButton,
 } from "@material-tailwind/react";
-import {
-  CubeIcon,
-  HomeIcon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { CubeIcon, HomeIcon, UserIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,9 +19,8 @@ import {
   SidenavProps,
   Submenu,
 } from "@/interface/sidenav.interface";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setOpenSidenav } from "@/store/slices/configuratorSlice";
 
 const iconsMap: Record<string, React.ReactNode> = {
   HomeIcon: <HomeIcon className={`w-5 h-5 text-inherit`} />,
@@ -36,7 +29,6 @@ const iconsMap: Record<string, React.ReactNode> = {
 };
 
 export function Sidenav({ routes }: SidenavProps) {
-  const dispatch = useDispatch();
   const { openSidenav, sidenavType, sidenavColor } = useSelector(
     (state: RootState) => state.openConfigurator
   );
@@ -83,7 +75,7 @@ export function Sidenav({ routes }: SidenavProps) {
 
   const sidenavColorsTypes: Record<string, string> = {
     white: "from-gray-100 to-gray-100 border-gray-200 shadow-lg",
-    dark: "from-black to-black border-gray-200",
+    dark: "from-gray-900 to-gray-800 border-gray-200",
     green: "from-green-400 to-green-600",
     orange: "from-orange-400 to-orange-600",
     red: "from-red-400 to-red-600",
@@ -92,16 +84,6 @@ export function Sidenav({ routes }: SidenavProps) {
 
   return (
     <>
-      <IconButton
-        variant="text"
-        color="white"
-        size="sm"
-        ripple={false}
-        className="absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
-        onClick={() => dispatch(setOpenSidenav(!openSidenav))}
-      >
-        <XMarkIcon strokeWidth={2.5} className="h-5 w-5 text-black" />
-      </IconButton>
       <Card
         className={`${sidenavTypes[sidenavType]} ${
           openSidenav ? "translate-x-0" : "-translate-x-80"
@@ -178,7 +160,7 @@ export function Sidenav({ routes }: SidenavProps) {
                           } ${
                             sidenavColor === "white"
                               ? "text-black focus:text-black"
-                              : "text-white focus:text-white"
+                              : "text-white focus:text-white hover:text-gray-500"
                           }`
                         : `select-none ${sidenavTextColorTypes[sidenavType]} hover:bg-gray-200 focus:bg-gray-100 active:bg-gray-100 hover:text-gray-900 focus:text-gray-900 active:text-gray-900`
                     }`}

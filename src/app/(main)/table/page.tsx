@@ -7,7 +7,7 @@ import {
   Avatar,
   Chip,
 } from "@material-tailwind/react";
-import { authorsTableData } from "../data/authors-table-data";
+import { authorsTableData } from "../../data/authors-table-data";
 
 interface Author {
   img: string;

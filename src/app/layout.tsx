@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { MaterialTailwindControllerProvider } from "@/context";
 import { ThemeProvider } from "../app/MTailwind";
-import PageLayout from "@/components/Layouts/PageLayout";
 import { Providers } from "./providers";
+import { ReactNode } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -33,13 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <ThemeProvider>
-          <Providers>
-            <MaterialTailwindControllerProvider>
-              <div className="min-h-screen bg-blue-gray-50/50">
-                <PageLayout>{children}</PageLayout>
-              </div>
-            </MaterialTailwindControllerProvider>
-          </Providers>
+          <Providers>{children}</Providers>
         </ThemeProvider>
       </body>
     </html>

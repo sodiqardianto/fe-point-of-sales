@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     openConfigurator: false,
     fixedNavbar: true,
-    sidenavType: "dark",
+    sidenavType: "white",
     openSidenav: false,
     sidenavColor: "dark",
 };
